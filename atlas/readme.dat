@@ -1,0 +1,92 @@
+Infrared Atlas of the Arcturus Spectrum, 0.92-5.36 microns
+
+Kenneth H. Hinkle, Lloyd Wallace
+Kitt Peak National Observatory, National Optical Astronomy Observatories
+khinkle@noao.edu, lwallace@noao.edu
+
+William Livingston
+National Solar Observatory, National Optical Astronomy Observatories
+wlivingston@noao.edu
+
+NOAO is operated by the Association of Universities for Research in Astronomy,
+Inc. under cooperative agreement with the National Science Foundation.
+
+
+
+
+The electronic version of the Infrared Atlas consists of 310 ASCII spectral 
+files and two line identification files plus a file containing a list of the 
+files and unobserved spectral regions.  Each spectral file contains the spectra 
+used to construct one page of the atlas plots.  The spectrum may be readily 
+plotted from these files using standard graphics packages, e.g. MONGO.  The 
+hard copy atlas pages were prepared using MONGO.  Below we give a sample MONGO 
+program for producing a simplified atlas page.  
+
+The spectral files are labeled abnnnn, where nnnn is the wavenumber of the 
+beginning of the page.  For example file ab4300 contains spectra for the 
+4300-4325 cm-1 page.  The file structure is as follows:
+column 1 contains the frequency scale in wavenumbers
+columns 2, 3, and 4 apply to the Arcturus spectrum as observed in summer-
+column 2 is the observed Arcturus spectrum
+column 3 is the telluric spectrum
+column 4 is the ratioed Arcturus spectrum after smoothing and continuum 
+     adjustment.  Note that the numbers in this column result from mathematics
+     and need not convey physical information.  Numbers are present in the 
+     ratio for spectral regions where all information has been blocked by 
+     opaque telluric lines.  These regions are not plotted in the hard copy 
+     version.
+Columns 5, 6, and 7 contain the winter spectra corresponding to
+     columns 2, 3, and 4.
+
+The atomic and molecular line identifications are listed separately in the
+files appendixA and appendixB which contain the same information as
+appendices A and B of the hard copy version of the atlas.  The file
+appendixC is a book-keeping device used to correlate the plot pages and
+ASCII files with frequency.
+
+The hard copy version of this atlas is available as an ASP monograph. 
+
+
+===============================================================================
+
+
+! MONGO instructions for producing a simplified atlas page.
+! Sample spectral plot is for a nominal 25 cm-1 page at 4475-4500 cm-1
+! (the plot actual covers 4473 to 4502 cm-1).
+! Change the output device, input file name, plot limits and Doppler 
+! correction as needed.  Then run as an INPUT file in MONGO.
+
+terminal 1
+erase
+data ab4475 
+xcol 1
+window 1 2 2
+limits x(46) x(1496) 0. 1.1
+box
+relocate x(46) 1.1
+putlabel 9 \\tArcturus divided by transmission
+relocate x(1496) -.1
+putlabel 9 cm\\u-1
+set x1 x(46) / 1.0000478 ! Doppler correction
+set x2 x(1496) / 1.0000478 ! Doppler correction
+limits x1 x2 0. 1.1
+ycol 4
+connect
+set x1 x(46) / .9999129 ! Doppler correction
+set x2 x(1496) / .9999129 ! Doppler correction
+limits x1 x2 0. 1.1
+ycol 7
+connect
+window 1 2 1
+limits x(46) x(1496) 0. 1.1 ! No Doppler correction
+box
+relocate x(46) 1.1
+putlabel 9 \\tSummer atmospheric transmission and observed Arcturus
+relocate x(1496) -.1
+putlabel 9 cm\\u-1
+ycol 3
+connect
+limits x(46) x(1496) .2 1.3 ! No Doppler correction
+ycol 2
+connect
+end

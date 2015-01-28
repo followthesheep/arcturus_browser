@@ -1,0 +1,66 @@
+CDROM/PASP/V107/P1402   Infrared Arcturus Atlas (Hinkle+ 1995)
+================================================================================
+Infrared Atlas of the Arcturus Spectrum, 0.9-5.3 microns
+      Kenneth Hinkle, Lloyd Wallace, & William Livingston
+      <1995, PASP, 107, 1402>
+      =1995PASP..107.1402H
+================================================================================
+
+Abstract:
+  A spectral atlas of the infrared spectrum of the bright K 2 giant
+  Arcturus has been completed using the 4 meter Mayall telescope and
+  FTS. The 0.9-5.3 um spectrum of Arcturus was observed at high
+  signal-to-noise with a resolution of 100,000.  Telluric lines were
+  removed by using telluric transmission spectra generated from
+  McMath-Pierce solar spectra or 4 meter lunar spectra.  The spectrum of
+  Arcturus was observed on two different dates selected to give large
+  opposite heliocentric shifts.  The spectra observed on the different
+  dates have been independently corrected for telluric absorption with
+  the result that the telluric spectrum has been effectively removed
+  from all but the most obscured wavelengths of the Arcturus spectrum.
+  We attempted to identify lines with central depths stronger than a few
+  percent.  Identifications seem well in hand with the unidentified
+  lines apparently atomic in origin.  The atlas is available either on
+  an AAS CD-ROM or as an ASP monograph.
+
+
+Description:
+  The atlas is contained in 310 spectral files and two line
+  indentification files plus a file containing a list of the files and
+  unobserved spectral regions.  The spectral file names are in the form
+  'abnnnnn' where 'nnnnn' denotes the spectral region, e.g. file 'ab4300'
+  contains spectra for the 4300-4325 cm-1 range.  The atomic and
+  molecular line identifications are in files 'appendix.a' and
+  'appendix.b'.  The file 'appendix.c' is a book-keeping device used to
+  correlate the plot plages and spectral files with frequency.  See the
+  author-supplied description in 'readme.dat' for more information.
+
+File Summary:
+--------------------------------------------------------------------------------
+File Name    Lrecl   Records    Explanations
+--------------------------------------------------------------------------------
+ab1867          89       901    Spectral atlas file 1867-1875 cm-1 range
+...              .         .    308 intervening spectral files
+ab10900         89      1421    Spectral atlas file 10896-10953 cm-1 range
+appendix.a      15      1912    Atomic line identifications
+appendix.b      24      5091    Molecular line identifications
+appendix.c      38       322    List of spectral plots plus gap pages
+readme.dat      80        92    Author-supplied description of the atlas
+--------------------------------------------------------------------------------
+
+
+Byte-by-byte Description of file: ab1867 ... ab10900
+--------------------------------------------------------------------------------
+ Bytes    Format   Units     Label       Explanations
+--------------------------------------------------------------------------------
+  1-11    D11.4    ---       Freq        Frequency scale in wavenumbers
+ 12-24    D13.5    ---       Obs_S       Observed Arcturus spectrum in summer
+ 25-37    D13.5    ---       Tel_S       Telluric spectrum in summer
+ 38-50    D13.5    ---       Rat_S       Ratioed spectrum in summer
+ 51-63    D13.5    ---       Obs_W       Observed Arcturus spectrum in winter
+ 64-76    D13.5    ---       Tel_W       Telluric spectrum in winter
+ 77-89    D13.5    ---       Rat_W       Ratioed spectrum in winter
+--------------------------------------------------------------------------------
+
+================================================================================
+(End)                                             Lee Brotzman [ADS] 07-Nov-1995

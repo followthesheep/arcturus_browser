@@ -1,0 +1,9 @@
+Hinkle et al. 1995, PASP, 107, 1402
+
+1) Downloaded compressed UNIX tar file into working directory.
+
+2) Renamed appendixA, appendixB, appendixC to appendix.a, appendix.b,
+   appendix.c, respectively, to conform with ISO 9660 file naming conventions.
+
+3) Generated TABLE.DOC, standard table description, and ABSTRACT.DOC, title and
+   abstract from the paper.
