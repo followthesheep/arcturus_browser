@@ -61,3 +61,4 @@ def read_appendix():
     output2 = open(outfile2,'w')
     for j in xrange(len(mol_name_arr)):
        output2.write('%f,%s\n' % (1.0/mol_wave[j]*1e4,mol_name_arr[j]))
+
