@@ -10,7 +10,7 @@ def extract_data():
     
     pass
 
-def plot_orig_data(datafile = None,micron=True):
+def plot_orig_data(datafile = None,micron=True,alpha=0.8):
     # plot the original text files
     if datafile is None:
         #datafile = os.path.join(os.path.dirname(__file__),'data/ab4475.')
@@ -24,9 +24,9 @@ def plot_orig_data(datafile = None,micron=True):
         # convert from wavenumber (1/cm) into microns
         summer_wave = (1.0/summer_wave)*1e4
         winter_wave = (1.0/winter_wave)*1e4        
-    plt.clf()
-    plt.plot(summer_wave,rat_s)
-    plt.plot(winter_wave,rat_w)
+
+    #plt.plot(summer_wave,rat_s)
+    plt.plot(winter_wave,rat_w,label='Arcturus')
     atomic_file = os.path.join(os.path.dirname(__file__),'data/arcturus_atomic_lines.txt')
     molecular_file = os.path.join(os.path.dirname(__file__),'data/arcturus_molecular_lines.txt')    
     atomic_lines, atomic_line_names = np.loadtxt(atomic_file,delimiter=',',unpack=True,dtype=str)
@@ -39,13 +39,13 @@ def plot_orig_data(datafile = None,micron=True):
     plt.ylim(0,1.1)
     plt.xlim(np.min(winter_wave),np.max(winter_wave))    
     #plotlines.oplotlines(spec_wave=winter_wave,spec_flux=rat_w,lines=atomic_lines,line_names=atomic_line_names)
-    plotlines.oplotlines(lines=atomic_lines,line_names=atomic_line_names,label=True)
-    plotlines.oplotlines(lines=molecular_lines,line_names=molecular_line_names,label=True)        
+    plotlines.oplotlines(lines=atomic_lines,line_names=atomic_line_names,label=True,color='r',linestyle=':')
+    plotlines.oplotlines(lines=molecular_lines,line_names=molecular_line_names,label=True,alpha=alpha)        
     #plotlines.oplotlines(spec_wave=winter_wave,spec_flux=rat_w,lines=molecular_lines,line_names=molecular_line_names)
 
-    plt.tight_layout()
 
-def plot_data_pdf(filename = 'Arcturus_IR_spectrum.pdf',per_page = 2,micron=True,plot_both=False):
+
+def plot_data_pdf(filename = 'Arcturus_IR_spectrum.pdf',per_page = 2,micron=True,plot_both=False,label_file=False):
     datadir = os.path.join(os.path.dirname(__file__),'data')
     # plot all the data into a PDF form
     pdf_pages = PdfPages(filename)
@@ -61,7 +61,8 @@ def plot_data_pdf(filename = 'Arcturus_IR_spectrum.pdf',per_page = 2,micron=True
     atomic_line_names = ['$'+lamb+'$' for lamb in atomic_line_names]
     
     sns.set_context('paper',font_scale=1.0, rc={"lines.linewidth": 0.8})
-    sns.set_style('white')    
+    sns.set_style('white')
+    sns.set_style('ticks')
     fontscale = 0.75
 
 
@@ -91,8 +92,8 @@ def plot_data_pdf(filename = 'Arcturus_IR_spectrum.pdf',per_page = 2,micron=True
         plt.xlim(np.min(winter_wave),np.max(winter_wave))
         
 
-        plotlines.oplotlines(label=True,lines=molecular_lines,line_names=molecular_line_names,size=12*fontscale)
-        plotlines.oplotlines(label=True,lines=atomic_lines,line_names=atomic_line_names,size=12*fontscale,color='b')
+        plotlines.oplotlines(label=True,lines=molecular_lines,line_names=molecular_line_names,size=12*fontscale,alpha=0.6)
+        plotlines.oplotlines(label=True,lines=atomic_lines,line_names=atomic_line_names,size=12*fontscale,color='r',alpha=0.9,linestyle=':')
 
         if plot_both:
             plt.plot(summer_wave,rat_s)
@@ -103,7 +104,8 @@ def plot_data_pdf(filename = 'Arcturus_IR_spectrum.pdf',per_page = 2,micron=True
         #plotlines.oplotlines(spec_wave=summer_wave,spec_flux=rat_s,lines=molecular_lines,line_names=molecular_line_names,size=12*fontscale)
         plt.xlabel(r'$Wavelength (\mu m)$')
         plt.ylabel(r'$Flux$')
-
+        if label_file:
+            plt.text(winter_wave[-2],1.05,specnames[i],size=9)
         if ((i != 0) and (((i+1) % per_page) == 0)):
             pdf_pages.savefig(fig,orientation='landscape')
             plt.close(fig)
