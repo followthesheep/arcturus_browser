@@ -4,12 +4,96 @@ import os
 from specutils import plotlines
 from matplotlib.backends.backend_pdf import PdfPages
 import seaborn as sns
+import overlap
 
 def extract_data():
     # convert the data in text file into a different form that is easier to load
     
     pass
 
+def clip(arr,n=4):
+    # clip some points from the beginning and end of the spectra
+    # remove n points from the beginning and end
+    return arr[n:-n]
+    
+def combine_data_unique(debug=False,save=False):
+    # combine all the abs* files into one without overlap in wavelength sampling
+    
+    datadir = os.path.join(os.path.dirname(__file__),'data/')
+    savefile = os.path.join(datadir,'arcturus_combined_unique')
+    specfiles = os.path.join(datadir,'filenames.txt')
+    specnames = np.loadtxt(specfiles,dtype=str,unpack=True)
+
+    file1 = os.path.join(datadir,specnames[0])
+    wave_num, obs_s, tel_s, rat_s, obs_w, tel_w, rat_w = np.loadtxt(file1,unpack=True)
+    ## wave_num = clip(wave_num)
+    ## obs_s = clip(obs_s)
+    ## tel_s = clip(tel_s)
+    ## rat_s = clip(rat_s)
+    ## obs_w = clip(obs_w)
+    ## tel_w = clip(tel_w)
+    ## rat_w = clip(rat_w)
+    wave_micron = (1.0/wave_num)*1e4
+    if debug:
+        plt.clf()
+        plt.plot(wave_micron,rat_s)
+        
+    for i in xrange(1,len(specnames)):
+        file2 = os.path.join(datadir,specnames[i])
+        wave_num2, obs_s2, tel_s2, rat_s2, obs_w2, tel_w2, rat_w2 = np.loadtxt(file2,unpack=True)
+        ## wave_num2 = clip(wave_num2)
+        ## obs_s2 = clip(obs_s2)
+        ## tel_s2 = clip(tel_s2)
+        ## rat_s2 = clip(rat_s2)
+        ## obs_w2 = clip(obs_w2)
+        ## tel_w2 = clip(tel_w2)
+        ## rat_w2 = clip(rat_w2)
+        
+        wave_micron2 = (1.0/wave_num2)*1e4
+
+        if debug:
+            plt.plot(wave_micron2,rat_s2)            
+        non_overlap = np.in1d(wave_num,wave_num2,invert=True)
+
+        # find the indices in common between the two
+        ind1, ind2 = overlap.overlap(wave_num,wave_num2)
+
+        # average the two pieces
+        if len(ind1) > 0:
+            obs_s2[ind2] = (obs_s2[ind2]+obs_s[ind1])/2.0
+            tel_s2[ind2] = (tel_s2[ind2]+tel_s[ind1])/2.0
+            rat_s2[ind2] = (rat_s2[ind2]+rat_s[ind1])/2.0                
+            obs_s2[ind2] = (obs_s2[ind2]+obs_s[ind1])/2.0
+            obs_w2[ind2] = (obs_w2[ind2]+obs_w[ind1])/2.0
+            tel_w2[ind2] = (tel_w2[ind2]+tel_w[ind1])/2.0
+            rat_w2[ind2] = (rat_w2[ind2]+rat_w[ind1])/2.0
+
+        
+        wave_num = np.append(wave_num2,wave_num[non_overlap])
+        obs_s = np.append(obs_s2,obs_s[non_overlap])
+        rat_s = np.append(rat_s2,rat_s[non_overlap])
+        tel_s = np.append(tel_s2,tel_s[non_overlap])
+
+        obs_w = np.append(obs_w2,obs_w[non_overlap])        
+        tel_w = np.append(tel_w2,tel_w[non_overlap])
+        rat_w = np.append(rat_w2,rat_w[non_overlap])
+
+
+    if save:
+        print 'saving: '+savefile+'.txt'
+        output = open(savefile+'.txt','w')
+        for j in xrange(len(wave_num)):
+            output.write('%f %f %f %f %f %f %f\n' % (wave_num[j],obs_s[j], tel_s[j], rat_s[j], obs_w[j], tel_w[j], rat_w[j]))
+        output.close()
+        print 'saving: '+savefile+'.npz'
+        np.savez(savefile,wave_num=wave_num,obs_s=obs_s,tel_s=tel_s,rat_s=rat_s,
+                 obs_w= obs_w,tel_w=tel_w,rat_w=rat_w)
+    if debug:
+        plt.plot((1.0/wave_num)*1e4,rat_s)
+        plt.ylim(0,1.8)
+
+    
+        
 def plot_orig_data(datafile = None,micron=True,alpha=0.8):
     # plot the original text files
     if datafile is None:
